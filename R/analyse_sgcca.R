@@ -35,7 +35,7 @@ analyze <- function(sgcca) {
   names(var) <- paste0("vs", ind)
 
   # Values of the design matrix
-  vars <- sgcca$C[upper.tri(sgcca$C)]
+  vars <- sgcca$call$connection[upper.tri(sgcca$call$connection)]
   names(vars) <- paste0("var", ind)
 
   # weights used
@@ -43,7 +43,7 @@ analyze <- function(sgcca) {
   names(weight) <- "weights"
 
   # Output
-  c(var, unlist(sgcca$AVE[c("AVE_inner", "AVE_outer")]), cc1 = cc,
+  c(var, unlist(sgcca$AVE[c("AVE_inner_model", "AVE_outer_model")]), cc1 = cc,
     vars, weight)
 }
 
@@ -54,15 +54,15 @@ dimensions_correlation <- function(sgcca) {
 }
 
 helper_cc <- function(sgcca, cY) {
-  d <- cY * sgcca$C
-  switch(sgcca$scheme,
+  d <- cY * sgcca$call$connection
+  switch(sgcca$call$scheme,
          centroid = sum(abs(d[upper.tri(d)])),
          horst = sum(d[upper.tri(d)]),
          factorial = sum(d[upper.tri(d)]^2))
 }
 
 index <- function(x) {
-  apply(which(upper.tri(x$C), arr.ind = TRUE), 1,
+  apply(which(upper.tri(x$call$connection), arr.ind = TRUE), 1,
         paste0, collapse = "")
 }
 
@@ -125,7 +125,7 @@ improve <- function(sgcca, namesA) {
   names(sgcca$a) <- namesA
   names(sgcca$astar) <- namesA
   names(sgcca$AVE$AVE_X) <- namesA
-  colnames(sgcca$C) <- namesA
-  rownames(sgcca$C) <- namesA
+  colnames(sgcca$call$connection) <- namesA
+  rownames(sgcca$call$connection) <- namesA
   aves(sgcca)
 }
