@@ -43,7 +43,7 @@ analyze <- function(sgcca) {
   names(weight) <- "weights"
 
   # Output
-  c(var, unlist(sgcca$AVE[c("AVE_inner_model", "AVE_outer_model")]), cc1 = cc,
+  c(var, unlist(sgcca$AVE[c("AVE_inner", "AVE_outer")]), cc1 = cc,
     vars, weight)
 }
 
